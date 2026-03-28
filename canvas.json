@@ -1,0 +1,801 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "workspaceId": "default",
+    "canvasLogicalId": "canvas:architecture",
+    "canonicalCanvasPath": "Canvases/Architecture.json",
+    "title": "TaskFlow Demo Spec",
+    "createdAtMs": 1711612800000,
+    "updatedAtMs": 1711616400000
+  },
+  "viewport": {
+    "zoomScale": 1,
+    "panX": 0,
+    "panY": 0
+  },
+  "nodes": {
+    "n1": {
+      "id": "n1",
+      "title": "Product Spec",
+      "bounds": {
+        "x": 80,
+        "y": 80,
+        "width": 280,
+        "height": 190
+      },
+      "position": {
+        "x": 11.463965017016427,
+        "y": 117.83357748676224
+      },
+      "ref": "Files/Product Spec.md",
+      "tags": [
+        "product",
+        "spec"
+      ],
+      "links": [],
+      "createdAtMs": 1711612800000,
+      "modifiedAtMs": 1711616400000,
+      "createdFromFileDrop": false,
+      "isBrokenLink": false,
+      "contentPreview": "# Product Spec\n\nTaskFlow is a lightweight task app...",
+      "content": null,
+      "markdownContent": "# Product Spec\n\n## Overview\nTaskFlow is a lightweight team task management app for small product teams. Users sign in, create projects, create tasks, assign owners, update task status, and track work from a single dashboard.\n\n## Target Users\n- Small software teams\n- Startup founders managing roadmap work\n- Product + engineering pairs coordinating delivery\n\n## Core User Stories\n1. A user can sign in and land on a dashboard showing active projects and assigned tasks.\n2. A user can create a project and add tasks with assignee, due date, priority, and status.\n3. A user can open a task detail view, comment on the task, and update status.\n4. A user receives an in-app notification when assigned a task or when a tracked task changes status.\n\n## Functional Requirements\n- Authentication with email/password\n- Dashboard with project list, assigned tasks, overdue tasks, and recent activity\n- Project CRUD and task CRUD\n- Task fields: title, description, assignee, due date, priority, status\n- Task comments and activity timeline\n- In-app notification center\n- Data persisted to a relational database\n\n## Non-Goals\n- Billing\n- Advanced search\n- File uploads\n- Complex RBAC beyond owner/member\n- Native mobile apps\n\n## Success Criteria\n- A new user can sign in and create their first project in under 1 minute\n- A user can create and complete a task end-to-end without leaving the app\n- Notifications appear after assignment or status changes\n- The generated app runs locally from a single documented setup flow"
+    },
+    "n2": {
+      "id": "n2",
+      "title": "Architecture",
+      "bounds": {
+        "x": 410,
+        "y": 70,
+        "width": 280,
+        "height": 210
+      },
+      "position": {
+        "x": 341.86443185392363,
+        "y": -1.648435136490665
+      },
+      "ref": "Files/Architecture.md",
+      "tags": [
+        "architecture",
+        "system"
+      ],
+      "links": [
+        "Data Model",
+        "Auth API",
+        "Tasks API"
+      ],
+      "createdAtMs": 1711612800000,
+      "modifiedAtMs": 1711616400000,
+      "createdFromFileDrop": false,
+      "isBrokenLink": false,
+      "contentPreview": "# Architecture\n\nNext.js app with API routes...",
+      "content": null,
+      "markdownContent": "# Architecture\n\n## Overview\nBuild TaskFlow as a pragmatic full-stack web app optimized for local setup and one-shot generation.\n\n## Recommended Stack\n- Frontend: Next.js + TypeScript + Tailwind CSS\n- Backend: Next.js route handlers or API routes\n- Database: Supabase Postgres\n- Auth: Supabase Auth with email/password\n- ORM: Prisma or Supabase client helpers\n\n## System Modules\n- Dashboard UI for projects, tasks, and recent activity\n- Auth module for sign in, sign out, and session validation\n- Project and task API layer\n- Notification service for in-app notifications\n- Database layer for users, projects, tasks, comments, and notifications\n\n## Request Flow\n1. Browser sends authenticated request to route handler.\n2. Route validates session.\n3. Route reads or writes database records.\n4. Response updates dashboard state.\n5. Mutation triggers activity log and notification creation when relevant.\n\n## Constraints\n- Prefer server simplicity over microservices\n- Keep everything runnable locally\n- Prioritize working CRUD and auth over pixel-perfect design"
+    },
+    "n3": {
+      "id": "n3",
+      "title": "Data Model",
+      "bounds": {
+        "x": 760,
+        "y": 80,
+        "width": 300,
+        "height": 240
+      },
+      "position": {
+        "x": 493.3734419881663,
+        "y": 500.292362272711
+      },
+      "ref": "Files/Data Model.md",
+      "tags": [
+        "data",
+        "schema"
+      ],
+      "links": [
+        "Auth API",
+        "Tasks API",
+        "Notifications API"
+      ],
+      "createdAtMs": 1711612800000,
+      "modifiedAtMs": 1711616400000,
+      "createdFromFileDrop": false,
+      "isBrokenLink": false,
+      "contentPreview": "# Data Model\n\nUsers, projects, tasks...",
+      "content": null,
+      "markdownContent": "# Data Model\n\n## Entities\n\n### User\n- `id: UUID`\n- `email: string`\n- `displayName: string`\n- `role: owner | member`\n- `createdAt: datetime`\n\n### Project\n- `id: UUID`\n- `name: string`\n- `description: text`\n- `ownerId: UUID`\n- `status: active | archived`\n- `createdAt: datetime`\n\n### Task\n- `id: UUID`\n- `projectId: UUID`\n- `title: string`\n- `description: text`\n- `status: todo | in_progress | done`\n- `priority: low | medium | high | urgent`\n- `assigneeId: UUID | null`\n- `dueDate: datetime | null`\n- `createdById: UUID`\n- `createdAt: datetime`\n- `updatedAt: datetime`\n\n### Comment\n- `id: UUID`\n- `taskId: UUID`\n- `authorId: UUID`\n- `body: text`\n- `createdAt: datetime`\n\n### Notification\n- `id: UUID`\n- `userId: UUID`\n- `type: assignment | status_change | comment`\n- `title: string`\n- `body: string`\n- `readAt: datetime | null`\n- `createdAt: datetime`\n\n## Relationships\n- A user owns many projects\n- A project has many tasks\n- A task has many comments\n- A user has many notifications\n\n## Validation Rules\n- Task title is required and max 160 chars\n- Due date may be null but cannot be before project creation\n- Only owner/member roles exist for this demo\n- Archived projects are read-only"
+    },
+    "n4": {
+      "id": "n4",
+      "title": "Auth API",
+      "bounds": {
+        "x": 80,
+        "y": 370,
+        "width": 260,
+        "height": 180
+      },
+      "position": {
+        "x": 788.8647994369614,
+        "y": 78.06209188004036
+      },
+      "ref": "Files/Auth API.md",
+      "tags": [
+        "api",
+        "auth"
+      ],
+      "links": [],
+      "createdAtMs": 1711612800000,
+      "modifiedAtMs": 1711616400000,
+      "createdFromFileDrop": false,
+      "isBrokenLink": false,
+      "contentPreview": "# Auth API\n\nEndpoints for signup, login...",
+      "content": null,
+      "markdownContent": "# Auth API\n\n## Overview\nAuthenticate users and expose the current session for the web app.\n\n## Endpoints\n### POST /api/auth/signup\n- Request: `{ email, password, displayName }`\n- Response: `{ user, session }`\n\n### POST /api/auth/login\n- Request: `{ email, password }`\n- Response: `{ user, session }`\n\n### POST /api/auth/logout\n- Invalidates current session\n- Response: `{ ok: true }`\n\n### GET /api/auth/me\n- Returns current signed-in user and session metadata\n\n## Requirements\n- Email/password only for demo\n- Invalid credentials return 401\n- Unauthenticated requests to protected endpoints return 401\n- Session must be available to dashboard and task pages"
+    },
+    "n5": {
+      "id": "n5",
+      "title": "Tasks API",
+      "bounds": {
+        "x": 390,
+        "y": 360,
+        "width": 300,
+        "height": 220
+      },
+      "position": {
+        "x": 942.3150431926415,
+        "y": 255.4553082272962
+      },
+      "ref": "Files/Tasks API.md",
+      "tags": [
+        "api",
+        "tasks"
+      ],
+      "links": [
+        "Notifications API"
+      ],
+      "createdAtMs": 1711612800000,
+      "modifiedAtMs": 1711616400000,
+      "createdFromFileDrop": false,
+      "isBrokenLink": false,
+      "contentPreview": "# Tasks API\n\nProject and task CRUD...",
+      "content": null,
+      "markdownContent": "# Tasks API\n\n## Overview\nProvide all project, task, comment, and dashboard read/write operations.\n\n## Endpoints\n### GET /api/projects\nReturn all visible projects for the signed-in user.\n\n### POST /api/projects\nCreate a new project with `{ name, description }`.\n\n### GET /api/projects/:projectId/tasks\nReturn tasks for a single project.\n\n### POST /api/tasks\nCreate a task with `{ projectId, title, description, assigneeId, dueDate, priority }`.\n\n### PATCH /api/tasks/:taskId\nUpdate title, description, assignee, due date, priority, or status.\n\n### POST /api/tasks/:taskId/comments\nAppend a comment with `{ body }`.\n\n### GET /api/dashboard\nReturn `assignedTasks`, `overdueTasks`, `recentActivity`, and `projectSummaries`.\n\n## Rules\n- Only authenticated users can access task endpoints\n- Task updates must write `updatedAt`\n- Status changes create activity entries\n- Assignment changes can trigger notifications"
+    },
+    "n6": {
+      "id": "n6",
+      "title": "Notifications API",
+      "bounds": {
+        "x": 760,
+        "y": 390,
+        "width": 300,
+        "height": 180
+      },
+      "position": {
+        "x": 160.1920128547149,
+        "y": 356.0305762026934
+      },
+      "ref": "Files/Notifications API.md",
+      "tags": [
+        "api",
+        "notifications"
+      ],
+      "links": [],
+      "createdAtMs": 1711612800000,
+      "modifiedAtMs": 1711616400000,
+      "createdFromFileDrop": false,
+      "isBrokenLink": false,
+      "contentPreview": "# Notifications API\n\nIn-app notifications for assignments...",
+      "content": null,
+      "markdownContent": "# Notifications API\n\n## Overview\nSupport an in-app notification center for assignment and workflow updates.\n\n## Endpoints\n### GET /api/notifications\nReturn notifications for the current user ordered newest first.\n\n### POST /api/notifications/mark-read\nRequest: `{ notificationIds: string[] }`\nResponse: `{ ok: true }`\n\n## Trigger Rules\n- Create notification when a task is assigned to a user\n- Create notification when a watched task changes status\n- Create notification when a comment is added to a task assigned to the user\n\n## UI Requirements\n- Notification bell in app chrome\n- Unread count badge\n- Mark one or many notifications as read"
+    },
+    "n7": {
+      "id": "n7",
+      "title": "Quickstart",
+      "bounds": {
+        "x": 390,
+        "y": 640,
+        "width": 320,
+        "height": 210
+      },
+      "position": {
+        "x": 581.4020708397152,
+        "y": 684.5150505025304
+      },
+      "ref": "Files/Quickstart.md",
+      "tags": [
+        "setup",
+        "build"
+      ],
+      "links": [],
+      "createdAtMs": 1711612800000,
+      "modifiedAtMs": 1711616400000,
+      "createdFromFileDrop": false,
+      "isBrokenLink": false,
+      "contentPreview": "# Quickstart\n\nBuild with Next.js, TypeScript...",
+      "content": null,
+      "markdownContent": "# Quickstart\n\n## Goal\nGenerate a working full-stack web app for TaskFlow from these specs.\n\n## Required Stack\n- Next.js App Router\n- TypeScript\n- Tailwind CSS\n- Supabase Postgres\n- Supabase Auth for email/password\n\n## Required Screens\n- Sign in / sign up\n- Dashboard\n- Project detail page\n- Task detail panel or page\n- Notification center\n\n## Build Priorities\n1. Working auth\n2. Working project/task CRUD\n3. Dashboard summaries\n4. Notifications\n5. Seed data for demo\n\n## Implementation Guidance\n- Prefer simple server-side route handlers over microservices\n- Keep schema and API names aligned with these specs\n- Return clear errors for invalid input\n- Generate a README with setup commands\n- Optimize for reliability over perfect design"
+    }
+  },
+  "links": {
+    "l1": {
+      "id": "l1",
+      "sourceNodeID": "n2",
+      "targetNodeID": "n3",
+      "controlPointOffset": {
+        "width": 10,
+        "height": -20
+      },
+      "strokeColor": {
+        "r": 0.93,
+        "g": 0.53,
+        "b": 0.38,
+        "a": 1
+      },
+      "createdAtMs": 1711612800000
+    },
+    "l2": {
+      "id": "l2",
+      "sourceNodeID": "n2",
+      "targetNodeID": "n4",
+      "controlPointOffset": {
+        "width": -25,
+        "height": 25
+      },
+      "strokeColor": {
+        "r": 0.37,
+        "g": 0.44,
+        "b": 0.38,
+        "a": 1
+      },
+      "createdAtMs": 1711612800000
+    },
+    "l3": {
+      "id": "l3",
+      "sourceNodeID": "n2",
+      "targetNodeID": "n5",
+      "controlPointOffset": {
+        "width": 0,
+        "height": 20
+      },
+      "strokeColor": {
+        "r": 0.93,
+        "g": 0.53,
+        "b": 0.38,
+        "a": 1
+      },
+      "createdAtMs": 1711612800000
+    },
+    "l4": {
+      "id": "l4",
+      "sourceNodeID": "n3",
+      "targetNodeID": "n4",
+      "controlPointOffset": {
+        "width": -15,
+        "height": 10
+      },
+      "strokeColor": {
+        "r": 0.55,
+        "g": 0.55,
+        "b": 0.65,
+        "a": 0.8
+      },
+      "createdAtMs": 1711612800000
+    },
+    "l5": {
+      "id": "l5",
+      "sourceNodeID": "n3",
+      "targetNodeID": "n5",
+      "controlPointOffset": {
+        "width": 0,
+        "height": 35
+      },
+      "strokeColor": {
+        "r": 0.37,
+        "g": 0.44,
+        "b": 0.38,
+        "a": 1
+      },
+      "createdAtMs": 1711612800000
+    },
+    "l6": {
+      "id": "l6",
+      "sourceNodeID": "n3",
+      "targetNodeID": "n6",
+      "controlPointOffset": {
+        "width": 0,
+        "height": 40
+      },
+      "strokeColor": {
+        "r": 0.93,
+        "g": 0.53,
+        "b": 0.38,
+        "a": 1
+      },
+      "createdAtMs": 1711612800000
+    },
+    "l7": {
+      "id": "l7",
+      "sourceNodeID": "n5",
+      "targetNodeID": "n6",
+      "controlPointOffset": {
+        "width": 20,
+        "height": 0
+      },
+      "strokeColor": {
+        "r": 0.55,
+        "g": 0.55,
+        "b": 0.65,
+        "a": 0.8
+      },
+      "createdAtMs": 1711612800000
+    }
+  },
+  "strokes": {
+    "S1A2B3C4-0001-0000-0000-000000000001": {
+      "id": "S1A2B3C4-0001-0000-0000-000000000001",
+      "toolType": "pen",
+      "color": {
+        "r": 0.17,
+        "g": 0.17,
+        "b": 0.18,
+        "a": 1
+      },
+      "width": 2.2,
+      "deleted": false,
+      "points": [
+        {
+          "x": 112,
+          "y": 188,
+          "tMs": 0,
+          "pressure": 0
+        },
+        {
+          "x": 112,
+          "y": 182,
+          "tMs": 16,
+          "pressure": 0.28
+        },
+        {
+          "x": 112,
+          "y": 172,
+          "tMs": 32,
+          "pressure": 0.52
+        },
+        {
+          "x": 112,
+          "y": 160,
+          "tMs": 48,
+          "pressure": 0.71
+        },
+        {
+          "x": 112,
+          "y": 148,
+          "tMs": 64,
+          "pressure": 0.8
+        },
+        {
+          "x": 112,
+          "y": 136,
+          "tMs": 80,
+          "pressure": 0.83
+        },
+        {
+          "x": 112,
+          "y": 126,
+          "tMs": 96,
+          "pressure": 0.8
+        },
+        {
+          "x": 112,
+          "y": 152,
+          "tMs": 112,
+          "pressure": 0.75
+        },
+        {
+          "x": 112,
+          "y": 178,
+          "tMs": 128,
+          "pressure": 0.7
+        },
+        {
+          "x": 112,
+          "y": 192,
+          "tMs": 140,
+          "pressure": 0.18
+        },
+        {
+          "x": 112,
+          "y": 194,
+          "tMs": 148,
+          "pressure": 0
+        }
+      ]
+    },
+    "S1A2B3C4-0002-0000-0000-000000000002": {
+      "id": "S1A2B3C4-0002-0000-0000-000000000002",
+      "toolType": "pen",
+      "color": {
+        "r": 0.17,
+        "g": 0.17,
+        "b": 0.18,
+        "a": 1
+      },
+      "width": 2.2,
+      "deleted": false,
+      "points": [
+        {
+          "x": 108,
+          "y": 158,
+          "tMs": 0,
+          "pressure": 0
+        },
+        {
+          "x": 112,
+          "y": 158,
+          "tMs": 16,
+          "pressure": 0.35
+        },
+        {
+          "x": 118,
+          "y": 158,
+          "tMs": 32,
+          "pressure": 0.65
+        },
+        {
+          "x": 124,
+          "y": 158,
+          "tMs": 48,
+          "pressure": 0.72
+        },
+        {
+          "x": 128,
+          "y": 158,
+          "tMs": 60,
+          "pressure": 0.2
+        },
+        {
+          "x": 130,
+          "y": 158,
+          "tMs": 68,
+          "pressure": 0
+        }
+      ]
+    },
+    "S1A2B3C4-0003-0000-0000-000000000003": {
+      "id": "S1A2B3C4-0003-0000-0000-000000000003",
+      "toolType": "pen",
+      "color": {
+        "r": 0.17,
+        "g": 0.17,
+        "b": 0.18,
+        "a": 1
+      },
+      "width": 2.2,
+      "deleted": false,
+      "points": [
+        {
+          "x": 142,
+          "y": 126,
+          "tMs": 0,
+          "pressure": 0
+        },
+        {
+          "x": 140,
+          "y": 130,
+          "tMs": 16,
+          "pressure": 0.3
+        },
+        {
+          "x": 136,
+          "y": 140,
+          "tMs": 32,
+          "pressure": 0.58
+        },
+        {
+          "x": 134,
+          "y": 152,
+          "tMs": 48,
+          "pressure": 0.74
+        },
+        {
+          "x": 134,
+          "y": 164,
+          "tMs": 64,
+          "pressure": 0.82
+        },
+        {
+          "x": 136,
+          "y": 176,
+          "tMs": 80,
+          "pressure": 0.78
+        },
+        {
+          "x": 140,
+          "y": 186,
+          "tMs": 96,
+          "pressure": 0.65
+        },
+        {
+          "x": 144,
+          "y": 193,
+          "tMs": 110,
+          "pressure": 0.22
+        },
+        {
+          "x": 146,
+          "y": 196,
+          "tMs": 118,
+          "pressure": 0
+        }
+      ]
+    },
+    "S1A2B3C4-0004-0000-0000-000000000004": {
+      "id": "S1A2B3C4-0004-0000-0000-000000000004",
+      "toolType": "pen",
+      "color": {
+        "r": 0.17,
+        "g": 0.17,
+        "b": 0.18,
+        "a": 1
+      },
+      "width": 2.2,
+      "deleted": false,
+      "points": [
+        {
+          "x": 158,
+          "y": 126,
+          "tMs": 0,
+          "pressure": 0
+        },
+        {
+          "x": 160,
+          "y": 130,
+          "tMs": 16,
+          "pressure": 0.32
+        },
+        {
+          "x": 162,
+          "y": 140,
+          "tMs": 32,
+          "pressure": 0.6
+        },
+        {
+          "x": 162,
+          "y": 152,
+          "tMs": 48,
+          "pressure": 0.76
+        },
+        {
+          "x": 162,
+          "y": 164,
+          "tMs": 64,
+          "pressure": 0.8
+        },
+        {
+          "x": 162,
+          "y": 174,
+          "tMs": 80,
+          "pressure": 0.72
+        },
+        {
+          "x": 160,
+          "y": 184,
+          "tMs": 96,
+          "pressure": 0.55
+        },
+        {
+          "x": 158,
+          "y": 192,
+          "tMs": 110,
+          "pressure": 0.2
+        },
+        {
+          "x": 157,
+          "y": 196,
+          "tMs": 118,
+          "pressure": 0
+        }
+      ]
+    },
+    "S1A2B3C4-0005-0000-0000-000000000005": {
+      "id": "S1A2B3C4-0005-0000-0000-000000000005",
+      "toolType": "pen",
+      "color": {
+        "r": 0.17,
+        "g": 0.17,
+        "b": 0.18,
+        "a": 1
+      },
+      "width": 2.2,
+      "deleted": false,
+      "points": [
+        {
+          "x": 174,
+          "y": 126,
+          "tMs": 0,
+          "pressure": 0
+        },
+        {
+          "x": 176,
+          "y": 128,
+          "tMs": 16,
+          "pressure": 0.25
+        },
+        {
+          "x": 180,
+          "y": 136,
+          "tMs": 32,
+          "pressure": 0.55
+        },
+        {
+          "x": 182,
+          "y": 148,
+          "tMs": 48,
+          "pressure": 0.72
+        },
+        {
+          "x": 180,
+          "y": 160,
+          "tMs": 64,
+          "pressure": 0.78
+        },
+        {
+          "x": 176,
+          "y": 170,
+          "tMs": 80,
+          "pressure": 0.75
+        },
+        {
+          "x": 178,
+          "y": 158,
+          "tMs": 96,
+          "pressure": 0.68
+        },
+        {
+          "x": 182,
+          "y": 146,
+          "tMs": 112,
+          "pressure": 0.62
+        },
+        {
+          "x": 186,
+          "y": 136,
+          "tMs": 128,
+          "pressure": 0.55
+        },
+        {
+          "x": 190,
+          "y": 128,
+          "tMs": 144,
+          "pressure": 0.38
+        },
+        {
+          "x": 192,
+          "y": 126,
+          "tMs": 155,
+          "pressure": 0
+        }
+      ]
+    },
+    "S1A2B3C4-0006-0000-0000-000000000006": {
+      "id": "S1A2B3C4-0006-0000-0000-000000000006",
+      "toolType": "pen",
+      "color": {
+        "r": 0.17,
+        "g": 0.17,
+        "b": 0.18,
+        "a": 1
+      },
+      "width": 2.2,
+      "deleted": false,
+      "points": [
+        {
+          "x": 204,
+          "y": 126,
+          "tMs": 0,
+          "pressure": 0
+        },
+        {
+          "x": 204,
+          "y": 130,
+          "tMs": 16,
+          "pressure": 0.3
+        },
+        {
+          "x": 204,
+          "y": 142,
+          "tMs": 32,
+          "pressure": 0.6
+        },
+        {
+          "x": 204,
+          "y": 156,
+          "tMs": 48,
+          "pressure": 0.76
+        },
+        {
+          "x": 204,
+          "y": 170,
+          "tMs": 64,
+          "pressure": 0.8
+        },
+        {
+          "x": 204,
+          "y": 182,
+          "tMs": 80,
+          "pressure": 0.72
+        },
+        {
+          "x": 204,
+          "y": 194,
+          "tMs": 96,
+          "pressure": 0.3
+        },
+        {
+          "x": 204,
+          "y": 196,
+          "tMs": 104,
+          "pressure": 0
+        }
+      ]
+    },
+    "S1A2B3C4-0007-0000-0000-000000000007": {
+      "id": "S1A2B3C4-0007-0000-0000-000000000007",
+      "toolType": "pen",
+      "color": {
+        "r": 0.17,
+        "g": 0.17,
+        "b": 0.18,
+        "a": 1
+      },
+      "width": 2.2,
+      "deleted": false,
+      "points": [
+        {
+          "x": 200,
+          "y": 158,
+          "tMs": 0,
+          "pressure": 0
+        },
+        {
+          "x": 202,
+          "y": 158,
+          "tMs": 16,
+          "pressure": 0.38
+        },
+        {
+          "x": 206,
+          "y": 158,
+          "tMs": 32,
+          "pressure": 0.65
+        },
+        {
+          "x": 210,
+          "y": 158,
+          "tMs": 48,
+          "pressure": 0.7
+        },
+        {
+          "x": 214,
+          "y": 158,
+          "tMs": 60,
+          "pressure": 0.25
+        },
+        {
+          "x": 216,
+          "y": 158,
+          "tMs": 68,
+          "pressure": 0
+        }
+      ]
+    }
+  },
+  "strokeOrder": [
+    "S1A2B3C4-0001-0000-0000-000000000001",
+    "S1A2B3C4-0002-0000-0000-000000000002",
+    "S1A2B3C4-0003-0000-0000-000000000003",
+    "S1A2B3C4-0004-0000-0000-000000000004",
+    "S1A2B3C4-0005-0000-0000-000000000005",
+    "S1A2B3C4-0006-0000-0000-000000000006",
+    "S1A2B3C4-0007-0000-0000-000000000007"
+  ],
+  "tombstones": {}
+}
