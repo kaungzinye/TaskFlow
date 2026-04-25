@@ -1,0 +1,218 @@
+{
+  "annotationAnchors" : [
+
+  ],
+  "drawingData" : "d3Jk8AEACAA6DggAEP\/\/\/\/\/\/\/\/\/\/fxgAQhCb81DdpYFEXqXOmkwI1pZV",
+  "links" : [
+    {
+      "controlPointOffset" : [
+        0,
+        0
+      ],
+      "createdAt" : "2026-04-25T14:46:22.908Z",
+      "id" : "AB5AC7B8-4259-45B1-8C37-AD74A9E8FEC3",
+      "isUnbound" : false,
+      "label" : "logs",
+      "sourceNodeID" : "9C124F03-3838-4ABD-B6E1-7851CD10A3A3",
+      "strokeColorAlpha" : 1,
+      "strokeColorBlue" : 1,
+      "strokeColorGreen" : 1,
+      "strokeColorRed" : 1,
+      "style" : {
+        "arrowheadStyle" : "arrow",
+        "colorOverride" : {
+          "alpha" : 1,
+          "blue" : 0,
+          "green" : 0,
+          "red" : 0
+        },
+        "labelFontSize" : 19.583333492279053,
+        "labelOffset" : 12,
+        "labelPositionOffset" : [
+          -37.799001880235416,
+          0.952916013787448
+        ],
+        "lineStyle" : "solid",
+        "lineThickness" : 1.5,
+        "sourceArrow" : true,
+        "targetArrow" : false
+      },
+      "targetNodeID" : "71AB79F2-C34A-4FF0-A49C-6120D71BF6FE",
+      "type" : "interfile"
+    },
+    {
+      "controlPointOffset" : [
+        -1.640637708026239,
+        12.714942237203358
+      ],
+      "createdAt" : "2026-04-25T14:52:33.474Z",
+      "id" : "74921682-3A13-4404-A69F-579577F51BEF",
+      "isUnbound" : false,
+      "label" : "queries",
+      "sourceNodeID" : "71AB79F2-C34A-4FF0-A49C-6120D71BF6FE",
+      "strokeColorAlpha" : 1,
+      "strokeColorBlue" : 0,
+      "strokeColorGreen" : 0,
+      "strokeColorRed" : 0,
+      "style" : {
+        "arrowheadStyle" : "arrow",
+        "labelFontSize" : 14,
+        "labelOffset" : 12,
+        "labelPositionOffset" : [
+          4.101594270065597,
+          -11.484463956183674
+        ],
+        "lineStyle" : "solid",
+        "lineThickness" : 1.5,
+        "sourceArrow" : false,
+        "targetArrow" : true
+      },
+      "targetNodeID" : "9E98F715-29B6-4A0C-BABF-413610D1DE46",
+      "type" : "interfile"
+    },
+    {
+      "controlPointOffset" : [
+        0,
+        0
+      ],
+      "createdAt" : "2026-04-25T14:52:47.432Z",
+      "id" : "D98E3385-C72C-4B7B-BC11-B35C9C52D147",
+      "isUnbound" : false,
+      "label" : "on reset",
+      "sourceNodeID" : "71AB79F2-C34A-4FF0-A49C-6120D71BF6FE",
+      "strokeColorAlpha" : 1,
+      "strokeColorBlue" : 0.11764705882352941,
+      "strokeColorGreen" : 0.2196078431372549,
+      "strokeColorRed" : 0.8509803921568627,
+      "style" : {
+        "arrowheadStyle" : "arrow",
+        "labelFontSize" : 19.208333492279053,
+        "labelOffset" : 12,
+        "labelPositionOffset" : [
+          41.50129280128265,
+          1.869427603661381
+        ],
+        "lineStyle" : "dotted",
+        "lineThickness" : 1.5,
+        "sourceArrow" : false,
+        "targetArrow" : true
+      },
+      "targetNodeID" : "C4A2F78E-41F5-4A03-ACE2-C008CCC4C838",
+      "type" : "interfile"
+    }
+  ],
+  "nodes" : [
+    {
+      "bounds" : [
+        [
+          24954.305375733726,
+          24707.529006704597
+        ],
+        [
+          120,
+          54
+        ]
+      ],
+      "createdAt" : "2026-04-25T14:46:19.186Z",
+      "id" : "9C124F03-3838-4ABD-B6E1-7851CD10A3A3",
+      "isBrokenRef" : false,
+      "links" : [
+
+      ],
+      "modifiedAt" : "2026-04-25T14:51:48.487Z",
+      "position" : [
+        25014.305375733726,
+        24734.529006704597
+      ],
+      "ref" : "Files\/Audit Log.md",
+      "tags" : [
+
+      ]
+    },
+    {
+      "bounds" : [
+        [
+          24859.23325492107,
+          24920.941145144185
+        ],
+        [
+          146,
+          50.5
+        ]
+      ],
+      "createdAt" : "2026-04-25T14:46:21.494Z",
+      "id" : "71AB79F2-C34A-4FF0-A49C-6120D71BF6FE",
+      "isBrokenRef" : false,
+      "links" : [
+        "Database",
+        "Email Service"
+      ],
+      "modifiedAt" : "2026-04-25T14:52:47.433Z",
+      "position" : [
+        24932.23325492107,
+        24946.191145144185
+      ],
+      "ref" : "Files\/Auth Service.md",
+      "tags" : [
+
+      ]
+    },
+    {
+      "bounds" : [
+        [
+          25179.964091102243,
+          24897.756775169917
+        ],
+        [
+          189.48477339985317,
+          79.66730079329955
+        ]
+      ],
+      "createdAt" : "2026-04-25T14:51:55.893Z",
+      "fontSize" : 25.034087125436088,
+      "id" : "9E98F715-29B6-4A0C-BABF-413610D1DE46",
+      "isBrokenRef" : false,
+      "links" : [
+        "Auth Service"
+      ],
+      "modifiedAt" : "2026-04-25T14:54:23.045Z",
+      "position" : [
+        25274.70647780217,
+        24937.590425566566
+      ],
+      "ref" : "Files\/Database.md",
+      "tags" : [
+
+      ]
+    },
+    {
+      "bounds" : [
+        [
+          24951.85412051239,
+          25130.443390550863
+        ],
+        [
+          202.8693587818371,
+          70.58027209065844
+        ]
+      ],
+      "createdAt" : "2026-04-25T14:52:44.521Z",
+      "fontSize" : 22.178643725345534,
+      "id" : "C4A2F78E-41F5-4A03-ACE2-C008CCC4C838",
+      "isBrokenRef" : false,
+      "isResizeLocked" : true,
+      "links" : [
+        "Auth Service"
+      ],
+      "modifiedAt" : "2026-04-25T14:54:17.694Z",
+      "position" : [
+        25053.28879990331,
+        25165.733526596192
+      ],
+      "ref" : "Files\/Email Service.md",
+      "tags" : [
+
+      ]
+    }
+  ]
+}
